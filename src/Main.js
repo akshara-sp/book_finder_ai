@@ -55,6 +55,7 @@ function Main() {
     }
 
     const updateBooks = () => {
+        setBooks([]);
         generateBookTitles(likes, dislikes, neutrals).then((titles) => {
                  getBookDetails(titles).then(
                     (books_) => {setBooks(books_);

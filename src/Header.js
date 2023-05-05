@@ -9,8 +9,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
-const navItems = ['About', 'Contact'];
+import { auth } from './firebase_config';
 
 const darkTheme = createTheme({
     palette: {
@@ -22,7 +21,13 @@ const darkTheme = createTheme({
   });
   
 
-function Header() {
+function Header({setLoggedIn}) {
+
+  function logout() {
+    auth.signOut();
+    sessionStorage.removeItem('uid');
+    setLoggedIn(false);
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -46,11 +51,12 @@ function Header() {
             BookFinderAI
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+              <Button key={"About"} sx={{ color: '#fff' }}>
+                About
               </Button>
-            ))}
+              <Button key={"Logout"} sx={{ color: '#fff' }} onClick={logout}>
+                Logout
+              </Button>
           </Box>
         </Toolbar>
       </AppBar>
