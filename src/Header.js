@@ -30,30 +30,19 @@ function Header({setLoggedIn}) {
   }
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ flexGrow: 1 }}>
       <CssBaseline />
       <ThemeProvider theme={darkTheme}>
-      <AppBar component="nav">
+      <AppBar position='static'>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{ flexGrow: 1, display: {sm: 'block' }}}
           >
             BookFinderAI
           </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Button key={"About"} sx={{ color: '#fff' }}>
-                About
-              </Button>
+          <Box sx={{ display: {sm: 'block' } }}>
               <Button key={"Logout"} sx={{ color: '#fff' }} onClick={logout}>
                 Logout
               </Button>

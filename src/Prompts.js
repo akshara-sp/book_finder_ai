@@ -1,16 +1,16 @@
 
-const prompts = ["Recommend ten books for me to read",
-                "Suggest ten books for me to read",
-                "Tell ten books for me to read",
-                "Recommend ten books to read",
-                "Suggest ten books to read",
-                "Tell ten books to read",
-                "Could you recommend ten books for me to read",
-                "Could you suggest ten books for me to read",
-                "Could you tell ten books for me to read",
-                "Could you recommend ten books to read",
-                "Could you suggest ten books to read",
-                "Could you suggest ten books to read"]
+const prompts = ["Recommend six books for me to read",
+                "Suggest six books for me to read",
+                "Tell six books for me to read",
+                "Recommend six books to read",
+                "Suggest six books to read",
+                "Tell six books to read",
+                "Could you recommend six books for me to read",
+                "Could you suggest six books for me to read",
+                "Could you tell six books for me to read",
+                "Could you recommend six books to read",
+                "Could you suggest six books to read",
+                "Could you suggest six books to read"]
 
 const json_prompts = ["Reply in json format",
                     "Write response in json format",
@@ -19,10 +19,17 @@ const json_prompts = ["Reply in json format",
                     "Write response in json format with details like 'title'",
                     "Answer in json format with details like 'title'"]
 
-export default function create_prompt(likes, dislikes, neutrals) {
+export default function create_prompt(likes, dislikes, neutrals, genres) {
     const i = Math.floor(Math.random() * prompts.length);
     const j = Math.floor(Math.random() * json_prompts.length);
     let prompt = prompts[i]
+
+    if (genres.length > 0) {
+        prompt = prompt + ". I like books from these genres - "
+        for (let k in genres) {
+            prompt = prompt + " " + genres[k] + ", "
+        }
+    }
 
     if (likes.length > 0) {
         prompt = prompt + ". I like"

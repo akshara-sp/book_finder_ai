@@ -4,16 +4,23 @@ import BookCards from "./BookCards";
 import {generateBookTitles, getBookDetails} from './BookApis';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { CircularProgress } from "@mui/material";
 
-function Main() {
+function Main({genres, setUpdatePref, likes, setLikes, dislikes, setDislikes, neutrals, setNeutrals}) {
+    console.log(genres)
+
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    let n_books = 3;
+    if (screenWidth <= 350) {
+        n_books = 1;
+    } else if (screenWidth <= 700) {
+        n_books = 2;
+    }
 
     const [books, setBooks] = useState([])
-    const [likes, setLikes] = useState([])
-    const [dislikes, setDislikes] = useState([])
-    const [neutrals, setNeutrals] = useState([])
 
     const updatePreference = (book_title, list_type, op_type) => {
-        console.log({"fn": "updatePreference", "book_title": book_title, "list_type": list_type, "op_type": op_type})
+        // console.log({"fn": "updatePreference", "book_title": book_title, "list_type": list_type, "op_type": op_type})
         if (list_type === 'likes') {
             if (op_type === 'add') {
                 if (!likes.includes(book_title)) {
@@ -51,36 +58,47 @@ function Main() {
                 }
             }
         }
-        console.log({"fn": "updatePreference", "likes": likes, "dislikes": dislikes, "neutrals": neutrals})
+        // console.log({"fn": "updatePreference", "likes": likes, "dislikes": dislikes, "neutrals": neutrals})
     }
 
     const updateBooks = () => {
         setBooks([]);
-        generateBookTitles(likes, dislikes, neutrals).then((titles) => {
-                 getBookDetails(titles).then(
+        generateBookTitles(likes, dislikes, neutrals, genres).then((titles) => {
+                 getBookDetails(titles, n_books).then(
                     (books_) => {setBooks(books_);
                                  setNeutrals([...neutrals, books_.map((data) => data.title)]);})
                 })
-        console.log({"fn": "updateBooks", "likes": likes, "dislikes": dislikes, "neutrals": neutrals})
+        // console.log({"fn": "updateBooks", "likes": likes, "dislikes": dislikes, "neutrals": neutrals})
     }
 
     useEffect(() => {
-        generateBookTitles(likes, dislikes, neutrals).then((titles) => {
-            getBookDetails(titles).then(
+        generateBookTitles(likes, dislikes, neutrals, genres).then((titles) => {
+            getBookDetails(titles, n_books).then(
                 (books_) => {setBooks(books_);
                              setNeutrals(books_.map((data) => data.title));})
         })
-        console.log({"fn": "useEffect", "likes": likes, "dislikes": dislikes, "neutrals": neutrals})
+        // console.log({"fn": "useEffect", "likes": likes, "dislikes": dislikes, "neutrals": neutrals})
     }, [])
 
-    return (<div>
-                <BookCards books={books} updatePreference={updatePreference}/>
-                <Box textAlign='center' marginTop="20px">
-                    <Button variant='contained' onClick={updateBooks}>
-                        Something else
-                    </Button>
-                </Box>
-            </div>)
+    if (books.length === 0) {
+        return (<div>
+            <Box marginTop="50px" alignItems="center" justifyContent="center" textAlign="center">
+                <CircularProgress />
+            </Box>
+        </div>)
+    } else {
+        return (<div>
+                    <BookCards books={books} updatePreference={updatePreference}/>
+                    <Box textAlign='center' marginTop="20px">
+                        <Button variant='contained' onClick={updateBooks}>
+                            Something else
+                        </Button>
+                        <Button variant='contained' sx={{marginLeft: '10px'}} onClick={() => setUpdatePref(true)}>
+                            Update Preferences
+                        </Button>
+                    </Box>
+                </div>)
+    }
 }
 
 export default Main;

@@ -2,9 +2,7 @@ import create_prompt from "./Prompts";
 
 const { Configuration, OpenAIApi } = require("openai");
 
-const getBookDetails = async (titles) => {
-    console.log("getBookDetails")
-    console.log(titles)
+const getBookDetails = async (titles, n_books) => {
     const books = [];
     for (const i in titles) {
         try {
@@ -23,19 +21,19 @@ const getBookDetails = async (titles) => {
                 // console.log(book);
                 books.push(book);
             }
-            if (books.length === 3) {
+            if (books.length === n_books) {
                 return books
             }
         } catch (error) {
             console.error("Error:", error);
         }
     }
-    console.log(books)
+    // console.log(books)
     return books
 };
 
 function findTitles(data) {
-    console.log({"fn": "findTitles", "data": data})
+    // console.log({"fn": "findTitles", "data": data})
     const titles = [];    
     for (const key in data) {
         if (key === 'title' && typeof data[key] === "string") {
@@ -47,7 +45,7 @@ function findTitles(data) {
     return titles;
 }
 
-const generateBookTitles = async (likes, dislikes, neutrals) => {
+const generateBookTitles = async (likes, dislikes, neutrals, genres) => {
 
     const all_titles = [["Catcher in the Rye", "Lord of the Rings", "Sapiens"],
                  ["Broken Glass", "A Little Life", "The Tipping Point"],
@@ -55,8 +53,9 @@ const generateBookTitles = async (likes, dislikes, neutrals) => {
                 ["Underland", "Brooklyn", "Night Watch"],
                 ["Cloud Atlas", "Never Let Me Go", "Wolf Hall"]]
     try {
-        const prompt = create_prompt(likes, dislikes, neutrals);
-        console.log(prompt)
+        // console.log(genres);
+        const prompt = create_prompt(likes, dislikes, neutrals, genres);
+        // console.log(prompt)
         // const i = Math.floor(Math.random() * 5);
         // return all_titles[i];
         // console.log("should never happen!")
